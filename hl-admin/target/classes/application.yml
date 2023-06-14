@@ -3,3 +3,16 @@ spring:
     name: service-system
   profiles:
     active: dev
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: assign_uuid
+      update-strategy: not_null
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    auto-mapping-behavior: partial
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
