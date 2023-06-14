@@ -1,6 +1,8 @@
 package com.hl.admin.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hl.admin.service.UmsRoleService;
+import com.hl.model.dto.RolePageDto;
 import com.hl.model.ums.UmsRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +26,14 @@ public class UmsRoleController {
 
     @Autowired
     private UmsRoleService umsRoleService;
+
+    // 分页
+    @ApiOperation("分页查询")
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public Page page(@RequestBody RolePageDto roleDTO) {
+        Page<UmsRole> roleList = umsRoleService.pageList(roleDTO);
+        return roleList;
+    }
 
 
     // 获取全部
