@@ -1,6 +1,7 @@
 package com.hl.admin.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hl.admin.log.LogAnnotation;
 import com.hl.admin.result.CommonPage;
 import com.hl.admin.result.CommonResult;
 import com.hl.admin.service.UmsRoleService;
@@ -30,6 +31,7 @@ public class UmsRoleController {
     private UmsRoleService umsRoleService;
 
     // 分页
+    @LogAnnotation
     @ApiOperation("分页查询")
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public CommonResult page(@RequestBody RolePageDto roleDTO) {
@@ -39,6 +41,7 @@ public class UmsRoleController {
 
 
     // 获取全部
+    @LogAnnotation
     @ApiOperation("获取全部角色")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public CommonResult list(){
