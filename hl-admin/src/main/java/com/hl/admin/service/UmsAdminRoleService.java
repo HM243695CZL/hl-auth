@@ -1,4 +1,4 @@
-package com.hl.admin.service.impl;
+package com.hl.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hl.model.ums.UmsAdminRole;

@@ -3,6 +3,7 @@ package com.hl.admin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hl.admin.mapper.UmsAdminRoleMapper;
+import com.hl.admin.service.UmsAdminRoleService;
 import com.hl.model.ums.UmsAdminRole;
 import org.springframework.stereotype.Service;
 
