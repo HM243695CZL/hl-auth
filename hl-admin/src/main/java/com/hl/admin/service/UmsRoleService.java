@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hl.model.dto.RolePageDto;
 import com.hl.model.ums.UmsRole;
 
+import java.util.List;
+
 public interface UmsRoleService extends IService<UmsRole> {
 
     Page<UmsRole> pageList(RolePageDto roleDTO);
+
+    List<String> viewAuth(String id);
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -79,6 +80,8 @@ public class UmsAdminController {
     public CommonResult findOne(@PathVariable String id){
         return CommonResult.success(umsAdminService.view(id));
     }
+
+
 
 
 }

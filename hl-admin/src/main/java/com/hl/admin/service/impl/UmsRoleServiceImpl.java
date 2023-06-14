@@ -10,6 +10,8 @@ import com.hl.model.dto.RolePageDto;
 import com.hl.model.ums.UmsRole;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> implements UmsRoleService {
 
@@ -21,5 +23,15 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
             queryWrapper.lambda().like(UmsRole::getName, roleDTO.getName());
         }
         return page(page, queryWrapper);
+    }
+
+    /**
+     * 获取已分配的权限
+     * @param id
+     * @return
+     */
+    @Override
+    public List<String> viewAuth(String id) {
+        return null;
     }
 }

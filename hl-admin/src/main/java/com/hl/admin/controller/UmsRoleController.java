@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>
  * 角色表 前端控制器
@@ -78,6 +80,13 @@ public class UmsRoleController {
         return CommonResult.success(umsRoleService.getById(id));
     }
 
+    // 获取角色已分配的权限
+    @LogAnnotation()
+    @ApiOperation("获取已分配的权限")
+    @RequestMapping(value = "/viewAuth/{id}", method = RequestMethod.GET)
+    public CommonResult viewAuth(@PathVariable String id) {
+        return CommonResult.success(umsRoleService.viewAuth(id));
+    }
 
 }
 
