@@ -5,15 +5,21 @@ import com.hl.admin.log.LogAnnotation;
 import com.hl.admin.result.CommonPage;
 import com.hl.admin.result.CommonResult;
 import com.hl.admin.service.UmsAdminService;
+import com.hl.admin.service.UmsMenuService;
 import com.hl.model.dto.AdminPageDto;
 import com.hl.model.dto.AllocationRoleDto;
+import com.hl.model.dto.InitMenuDto;
+import com.hl.model.dto.LoginParamDto;
 import com.hl.model.ums.UmsAdmin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -30,6 +36,9 @@ public class UmsAdminController {
 
     @Autowired
     private UmsAdminService umsAdminService;
+
+    @Autowired
+    private UmsMenuService menuService;
 
 
     // 分页
@@ -87,6 +96,21 @@ public class UmsAdminController {
     @RequestMapping(value = "/allocationRole", method = RequestMethod.POST)
     public CommonResult allocationRole(@RequestBody AllocationRoleDto allocationRoleDto) {
         return CommonResult.success(umsAdminService.allocationRole(allocationRoleDto));
+    }
+
+    // 登录
+    @LogAnnotation
+    @ApiOperation("登录")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public CommonResult login(@RequestBody LoginParamDto loginParamDto, HttpServletRequest request) {
+        String token = umsAdminService.login(loginParamDto, request);
+        UmsAdmin userInfo = umsAdminService.getCurrentAdmin(loginParamDto.getUsername());
+        List<InitMenuDto> menuList = menuService.getMenuListByUserId(userInfo.getId());
+        HashMap<String, Object> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        tokenMap.put("userInfo", userInfo);
+        tokenMap.put("menuList", menuList);
+        return CommonResult.success(tokenMap);
     }
 
 

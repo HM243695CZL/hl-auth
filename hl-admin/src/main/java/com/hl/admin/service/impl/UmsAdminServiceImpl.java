@@ -1,21 +1,26 @@
 package com.hl.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hl.admin.constants.Constants;
 import com.hl.admin.mapper.UmsAdminMapper;
 import com.hl.admin.service.UmsAdminRoleService;
 import com.hl.admin.service.UmsAdminService;
+import com.hl.admin.utils.JwtHelper;
 import com.hl.model.dto.AdminPageDto;
 import com.hl.model.dto.AllocationRoleDto;
+import com.hl.model.dto.LoginParamDto;
 import com.hl.model.ums.UmsAdmin;
 import com.hl.model.ums.UmsAdminRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,6 +113,32 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public Boolean allocationRole(AllocationRoleDto allocationRoleDto) {
         List<UmsAdminRole> adminRoleList = setAdminAndRole(allocationRoleDto.getRoleIds(), allocationRoleDto.getId());
         return adminRoleService.saveBatch(adminRoleList);
+    }
+
+    /**
+     * 登录
+     * @param loginParamDto
+     * @param request
+     * @return
+     */
+    @Override
+    public String login(LoginParamDto loginParamDto, HttpServletRequest request) {
+        String token = null;
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UmsAdmin::getUsername, loginParamDto.getUsername());
+        queryWrapper.lambda().eq(UmsAdmin::getPassword, loginParamDto.getPassword());
+        UmsAdmin admin = getOne(queryWrapper);
+        if (admin != null) {
+            token = JwtHelper.createToken(admin.getId(), admin.getUsername());
+        }
+        return token;
+    }
+
+    @Override
+    public UmsAdmin getCurrentAdmin(String username) {
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UmsAdmin::getUsername, username);
+        return getOne(queryWrapper);
     }
 
     /**

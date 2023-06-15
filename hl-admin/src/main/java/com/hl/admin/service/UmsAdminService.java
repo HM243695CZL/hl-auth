@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hl.model.dto.AdminPageDto;
 import com.hl.model.dto.AllocationRoleDto;
+import com.hl.model.dto.LoginParamDto;
 import com.hl.model.ums.UmsAdmin;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -28,4 +31,8 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     Boolean delete(String id);
 
     Boolean allocationRole(AllocationRoleDto allocationRoleDto);
+
+    String login(LoginParamDto loginParamDto, HttpServletRequest request);
+
+    UmsAdmin getCurrentAdmin(String username);
 }
