@@ -2,7 +2,7 @@ package com.hl.admin.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hl.model.dto.AuthMenuDTO;
+import com.hl.model.dto.AuthMenuDto;
 import com.hl.model.dto.RolePageDto;
 import com.hl.model.ums.UmsRole;
 
@@ -16,8 +16,8 @@ public interface UmsRoleService extends IService<UmsRole> {
 
     /**
      * 分配权限
-     * @param authMenuDTO
+     * @param authMenuDto
      * @return
      */
-    Boolean authMenu(AuthMenuDTO authMenuDTO);
+    Boolean authMenu(AuthMenuDto authMenuDto);
 }

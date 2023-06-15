@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hl.admin.mapper.UmsRoleMapper;
 import com.hl.admin.service.UmsRoleMenuService;
 import com.hl.admin.service.UmsRoleService;
-import com.hl.model.dto.AuthMenuDTO;
+import com.hl.model.dto.AuthMenuDto;
 import com.hl.model.dto.RolePageDto;
 import com.hl.model.ums.UmsRole;
 import com.hl.model.ums.UmsRoleMenu;
@@ -49,18 +49,18 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
 
     /**
      * 分配权限
-     * @param authMenuDTO
+     * @param authMenuDto
      * @return
      */
     @Transactional
     @Override
-    public Boolean authMenu(AuthMenuDTO authMenuDTO) {
+    public Boolean authMenu(AuthMenuDto authMenuDto) {
         // 先清空之前的授权
         QueryWrapper<UmsRoleMenu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(UmsRoleMenu::getRoleId, authMenuDTO.getId());
+        queryWrapper.lambda().eq(UmsRoleMenu::getRoleId, authMenuDto.getId());
         roleMenuService.remove(queryWrapper);
 
-        List<UmsRoleMenu> roleMenuList = setRoleAndMenuRelation(authMenuDTO.getMenuIds(), authMenuDTO.getId());
+        List<UmsRoleMenu> roleMenuList = setRoleAndMenuRelation(authMenuDto.getMenuIds(), authMenuDto.getId());
         return roleMenuService.saveBatch(roleMenuList);
     }
 

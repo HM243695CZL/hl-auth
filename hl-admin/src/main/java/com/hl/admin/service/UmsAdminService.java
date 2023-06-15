@@ -4,6 +4,7 @@ package com.hl.admin.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hl.model.dto.AdminPageDto;
+import com.hl.model.dto.AllocationRoleDto;
 import com.hl.model.ums.UmsAdmin;
 
 /**
@@ -25,4 +26,6 @@ public interface UmsAdminService extends IService<UmsAdmin> {
     UmsAdmin view(String id);
 
     Boolean delete(String id);
+
+    Boolean allocationRole(AllocationRoleDto allocationRoleDto);
 }

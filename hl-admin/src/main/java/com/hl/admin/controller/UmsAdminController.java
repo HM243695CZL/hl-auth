@@ -6,6 +6,7 @@ import com.hl.admin.result.CommonPage;
 import com.hl.admin.result.CommonResult;
 import com.hl.admin.service.UmsAdminService;
 import com.hl.model.dto.AdminPageDto;
+import com.hl.model.dto.AllocationRoleDto;
 import com.hl.model.ums.UmsAdmin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * <p>
@@ -81,7 +81,13 @@ public class UmsAdminController {
         return CommonResult.success(umsAdminService.view(id));
     }
 
-
+    // 分配角色
+    @LogAnnotation
+    @ApiOperation("分配角色")
+    @RequestMapping(value = "/allocationRole", method = RequestMethod.POST)
+    public CommonResult allocationRole(@RequestBody AllocationRoleDto allocationRoleDto) {
+        return CommonResult.success(umsAdminService.allocationRole(allocationRoleDto));
+    }
 
 
 }

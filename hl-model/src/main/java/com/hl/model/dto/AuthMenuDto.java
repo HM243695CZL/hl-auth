@@ -9,7 +9,7 @@ import java.util.List;
  * 设置角色对应菜单权限的DTO
  */
 @Data
-public class AuthMenuDTO {
+public class AuthMenuDto {
 
     @ApiModelProperty(value = "菜单id数组")
     private List<String> menuIds;

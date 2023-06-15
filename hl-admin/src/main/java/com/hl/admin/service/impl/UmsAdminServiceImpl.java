@@ -8,6 +8,7 @@ import com.hl.admin.mapper.UmsAdminMapper;
 import com.hl.admin.service.UmsAdminRoleService;
 import com.hl.admin.service.UmsAdminService;
 import com.hl.model.dto.AdminPageDto;
+import com.hl.model.dto.AllocationRoleDto;
 import com.hl.model.ums.UmsAdmin;
 import com.hl.model.ums.UmsAdminRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,12 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Autowired
     private UmsAdminRoleService adminRoleService;
 
+
+    /**
+     * 添加用户
+     * @param umsAdmin
+     * @return
+     */
     @Transactional
     @Override
     public Boolean create(UmsAdmin umsAdmin) {
@@ -43,6 +50,11 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return page(page, queryWrapper);
     }
 
+    /**
+     * 更新用户
+     * @param umsAdmin
+     * @return
+     */
     @Override
     public Boolean updateAdmin(UmsAdmin umsAdmin) {
         UmsAdmin admin = getById(umsAdmin.getId());
@@ -58,6 +70,11 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return result;
     }
 
+    /**
+     * 查看用户
+     * @param id
+     * @return
+     */
     @Override
     public UmsAdmin view(String id) {
         UmsAdmin admin = getById(id);
@@ -68,6 +85,11 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return admin;
     }
 
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
     @Override
     public Boolean delete(String id) {
         // 清空当前用户的所有角色
@@ -75,6 +97,17 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         queryWrapper.lambda().eq(UmsAdminRole::getAdminId, id);
         adminRoleService.remove(queryWrapper);
         return removeById(id);
+    }
+
+    /**
+     * 分配角色
+     * @param allocationRoleDto
+     * @return
+     */
+    @Override
+    public Boolean allocationRole(AllocationRoleDto allocationRoleDto) {
+        List<UmsAdminRole> adminRoleList = setAdminAndRole(allocationRoleDto.getRoleIds(), allocationRoleDto.getId());
+        return adminRoleService.saveBatch(adminRoleList);
     }
 
     /**
