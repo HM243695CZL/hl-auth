@@ -26,4 +26,10 @@ public interface UmsMenuService extends IService<UmsMenu> {
      * @return
      */
     List<InitMenuDto> getMenuListByUserId(String id);
+
+    /**
+     * 获取全部菜单
+     * @return
+     */
+    List<UmsMenu> getMenuList();
 }
