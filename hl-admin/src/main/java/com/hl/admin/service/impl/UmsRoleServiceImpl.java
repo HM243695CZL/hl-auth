@@ -5,15 +5,25 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hl.admin.mapper.UmsRoleMapper;
+import com.hl.admin.service.UmsRoleMenuService;
 import com.hl.admin.service.UmsRoleService;
+import com.hl.model.dto.AuthMenuDTO;
 import com.hl.model.dto.RolePageDto;
 import com.hl.model.ums.UmsRole;
+import com.hl.model.ums.UmsRoleMenu;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> implements UmsRoleService {
+
+    @Autowired
+    private UmsRoleMenuService roleMenuService;
 
     @Override
     public Page<UmsRole> pageList(RolePageDto roleDTO) {
@@ -32,6 +42,42 @@ public class UmsRoleServiceImpl extends ServiceImpl<UmsRoleMapper, UmsRole> impl
      */
     @Override
     public List<String> viewAuth(String id) {
-        return null;
+        QueryWrapper<UmsRoleMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UmsRoleMenu::getRoleId, id);
+        return roleMenuService.list(queryWrapper.select("menu_id")).stream().map(UmsRoleMenu::getMenuId).collect(Collectors.toList());
+    }
+
+    /**
+     * 分配权限
+     * @param authMenuDTO
+     * @return
+     */
+    @Transactional
+    @Override
+    public Boolean authMenu(AuthMenuDTO authMenuDTO) {
+        // 先清空之前的授权
+        QueryWrapper<UmsRoleMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UmsRoleMenu::getRoleId, authMenuDTO.getId());
+        roleMenuService.remove(queryWrapper);
+
+        List<UmsRoleMenu> roleMenuList = setRoleAndMenuRelation(authMenuDTO.getMenuIds(), authMenuDTO.getId());
+        return roleMenuService.saveBatch(roleMenuList);
+    }
+
+    /**
+     * 设置角色和菜单的关联关系
+     * @param menuIds
+     * @param roleId
+     * @return
+     */
+    private List<UmsRoleMenu> setRoleAndMenuRelation(List<String> menuIds, String roleId) {
+        ArrayList<UmsRoleMenu> roleMenuList = new ArrayList<>();
+        for (String menuId : menuIds) {
+            UmsRoleMenu roleMenu = new UmsRoleMenu();
+            roleMenu.setRoleId(roleId);
+            roleMenu.setMenuId(menuId);
+            roleMenuList.add(roleMenu);
+        }
+        return roleMenuList;
     }
 }

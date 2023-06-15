@@ -5,6 +5,7 @@ import com.hl.admin.log.LogAnnotation;
 import com.hl.admin.result.CommonPage;
 import com.hl.admin.result.CommonResult;
 import com.hl.admin.service.UmsRoleService;
+import com.hl.model.dto.AuthMenuDTO;
 import com.hl.model.dto.RolePageDto;
 import com.hl.model.ums.UmsRole;
 import io.swagger.annotations.Api;
@@ -86,6 +87,14 @@ public class UmsRoleController {
     @RequestMapping(value = "/viewAuth/{id}", method = RequestMethod.GET)
     public CommonResult viewAuth(@PathVariable String id) {
         return CommonResult.success(umsRoleService.viewAuth(id));
+    }
+
+    // 分配权限
+    @LogAnnotation
+    @ApiOperation("分配权限")
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    public CommonResult authMenu(@RequestBody AuthMenuDTO authMenuDTO) {
+        return CommonResult.success(umsRoleService.authMenu(authMenuDTO));
     }
 
 }
