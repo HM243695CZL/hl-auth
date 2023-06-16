@@ -30,9 +30,19 @@ public interface UmsAdminService extends IService<UmsAdmin> {
 
     Boolean delete(String id);
 
+    /**
+     * 分配角色
+     * @param allocationRoleDto
+     * @return
+     */
     Boolean allocationRole(AllocationRoleDto allocationRoleDto);
 
     String login(LoginParamDto loginParamDto, HttpServletRequest request);
 
-    UmsAdmin getCurrentAdmin(String username);
+    /**
+     * 根据用户名获取用户信息
+     * @param username
+     * @return
+     */
+    UmsAdmin getUserInfoByUsername(String username);
 }

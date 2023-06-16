@@ -8,6 +8,7 @@ public enum ResultCode implements IErrorCode {
     SUCCESS(200, "操作成功"),
     FAILED(500, "操作失败"),
     VALIDATE_FAILED(501, "参数检验失败"),
+    PASSWORD_ERROR(502, "密码错误"),
     UNAUTHORIZED(401, "您未登录"),
     FORBIDDEN(403, "没有相关权限"),
     UN_KNOWN(9999, "未知异常，请联系管理员，或稍后再试!");

@@ -104,7 +104,7 @@ public class UmsAdminController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public CommonResult login(@RequestBody LoginParamDto loginParamDto, HttpServletRequest request) {
         String token = umsAdminService.login(loginParamDto, request);
-        UmsAdmin userInfo = umsAdminService.getCurrentAdmin(loginParamDto.getUsername());
+        UmsAdmin userInfo = umsAdminService.getUserInfoByUsername(loginParamDto.getUsername());
         List<InitMenuDto> menuList = menuService.getMenuListByUserId(userInfo.getId());
         HashMap<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token", token);

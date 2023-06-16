@@ -1,7 +1,6 @@
 package com.hl.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hl.admin.constants.Constants;
@@ -9,6 +8,7 @@ import com.hl.admin.mapper.UmsAdminMapper;
 import com.hl.admin.service.UmsAdminRoleService;
 import com.hl.admin.service.UmsAdminService;
 import com.hl.admin.utils.JwtHelper;
+import com.hl.admin.utils.MD5;
 import com.hl.model.dto.AdminPageDto;
 import com.hl.model.dto.AllocationRoleDto;
 import com.hl.model.dto.LoginParamDto;
@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Override
     public Boolean create(UmsAdmin umsAdmin) {
         // 设置用户初始密码
-        umsAdmin.setPassword(Constants.INIT_PASSWORD);
+        umsAdmin.setPassword(MD5.encrypt(Constants.INIT_PASSWORD));
         boolean result = save(umsAdmin);
         List<UmsAdminRole> adminRoleList = setAdminAndRole(umsAdmin.getRoleIds(), umsAdmin.getId());
         adminRoleService.saveBatch(adminRoleList);
@@ -125,8 +124,9 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public String login(LoginParamDto loginParamDto, HttpServletRequest request) {
         String token = null;
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
+        String md5Password = MD5.encrypt(loginParamDto.getPassword());
         queryWrapper.lambda().eq(UmsAdmin::getUsername, loginParamDto.getUsername());
-        queryWrapper.lambda().eq(UmsAdmin::getPassword, loginParamDto.getPassword());
+        queryWrapper.lambda().eq(UmsAdmin::getPassword, md5Password);
         UmsAdmin admin = getOne(queryWrapper);
         if (admin != null) {
             token = JwtHelper.createToken(admin.getId(), admin.getUsername());
@@ -134,8 +134,13 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         return token;
     }
 
+    /**
+     * 根据用户名获取用户信息
+     * @param username
+     * @return
+     */
     @Override
-    public UmsAdmin getCurrentAdmin(String username) {
+    public UmsAdmin getUserInfoByUsername(String username) {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(UmsAdmin::getUsername, username);
         return getOne(queryWrapper);

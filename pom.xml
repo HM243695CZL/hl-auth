@@ -12,6 +12,7 @@
         <module>hl-common</module>
         <module>hl-model</module>
         <module>hl-admin</module>
+        <module>hl-security</module>
     </modules>
 
     <parent>
