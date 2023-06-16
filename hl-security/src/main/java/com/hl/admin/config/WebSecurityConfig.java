@@ -3,6 +3,7 @@ package com.hl.admin.config;
 import com.hl.admin.custom.CustomMd5PasswordEncoder;
 import com.hl.admin.filter.TokenAuthenticationFilter;
 import com.hl.admin.filter.TokenLoginFilter;
+import com.hl.admin.service.LoginInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomMd5PasswordEncoder customMd5PasswordEncoder;
 
+    @Autowired
+    private LoginInfoService loginInfoService;
+
 
     @Bean
     @Override
@@ -50,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //TokenAuthenticationFilter放到UsernamePasswordAuthenticationFilter的前面，这样做就是为了除了登录的时候去查询数据库外，其他时候都用token进行认证。
                 .addFilterBefore(new TokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilter(new TokenLoginFilter(authenticationManager()));
+                .addFilter(new TokenLoginFilter(authenticationManager(), loginInfoService));
 
         //禁用session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

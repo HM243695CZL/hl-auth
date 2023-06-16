@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hl.admin.custom.CustomUser;
 import com.hl.admin.result.CommonResult;
 import com.hl.admin.result.ResultCode;
+import com.hl.admin.service.LoginInfoService;
 import com.hl.admin.utils.JwtHelper;
-import com.hl.admin.utils.MD5;
 import com.hl.admin.utils.ResponseUtil;
+import com.hl.model.dto.InitMenuDto;
 import com.hl.model.dto.LoginParamDto;
+import com.hl.model.ums.UmsAdmin;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,11 +34,15 @@ import java.util.Map;
  */
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-    public TokenLoginFilter(AuthenticationManager authenticationManager) {
+    private LoginInfoService loginInfoService;
+
+    public TokenLoginFilter(AuthenticationManager authenticationManager,
+                            LoginInfoService loginInfoService) {
         this.setAuthenticationManager(authenticationManager);
         this.setPostOnly(false);
         //指定登录接口及提交方式，可以指定任意路径
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/admin/admin/login","POST"));
+        this.loginInfoService = loginInfoService;
     }
 
     /**
@@ -73,9 +80,12 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication auth) throws IOException, ServletException {
         CustomUser customUser = (CustomUser) auth.getPrincipal();
         String token = JwtHelper.createToken(customUser.getSysUser().getId(), customUser.getSysUser().getUsername());
-
+        UmsAdmin userInfo = loginInfoService.getUserInfoByUsername(customUser.getSysUser().getUsername());
+        List<InitMenuDto> menuList = loginInfoService.getMenuListByUserId(customUser.getSysUser().getId());
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
+        map.put("userInfo", userInfo);
+        map.put("menuList", menuList);
         ResponseUtil.out(response, CommonResult.success(map));
     }
 
