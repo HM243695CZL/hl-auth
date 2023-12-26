@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-    private LoginInfoService loginInfoService;
+    private final LoginInfoService loginInfoService;
 
     public TokenLoginFilter(AuthenticationManager authenticationManager,
                             LoginInfoService loginInfoService) {
@@ -100,7 +100,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException e) throws IOException, ServletException {
-
         if(e.getCause() instanceof RuntimeException) {
             ResponseUtil.out(response, CommonResult.failed(e.getCause().getMessage()));
         } else if (e.getMessage().equals("Bad credentials")) {

@@ -49,10 +49,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         // token置于header里
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         logger.info("token:"+token);
         if (!StringUtils.isEmpty(token)) {
-            String username = JwtHelper.getUsername(token);
+            String username = JwtHelper.getUsername(token.replace("Bearer ", ""));
             logger.info("username:"+username);
             if (!StringUtils.isEmpty(username)) {
                 return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());

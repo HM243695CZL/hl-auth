@@ -7,6 +7,7 @@ import com.hl.admin.constants.Constants;
 import com.hl.admin.mapper.UmsAdminMapper;
 import com.hl.admin.service.UmsAdminRoleService;
 import com.hl.admin.service.UmsAdminService;
+import com.hl.admin.service.UmsRoleService;
 import com.hl.admin.utils.JwtHelper;
 import com.hl.admin.utils.MD5;
 import com.hl.model.dto.AdminPageDto;
@@ -29,6 +30,9 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Autowired
     private UmsAdminRoleService adminRoleService;
+
+    @Autowired
+    private UmsRoleService roleService;
 
 
     /**
@@ -143,7 +147,18 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public UmsAdmin getUserInfoByUsername(String username) {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(UmsAdmin::getUsername, username);
-        return getOne(queryWrapper);
+        UmsAdmin admin = getOne(queryWrapper);
+        // 查询用户所有的角色id
+        List<String> roleIds = adminRoleService.list(new QueryWrapper<UmsAdminRole>().eq("admin_id", admin.getId()))
+                .stream().map(UmsAdminRole::getRoleId).collect(Collectors.toList());
+        admin.setRoleIds(roleIds);
+        // 根据角色id获取角色key
+        List<String> roleKeys = new ArrayList<>();
+        for (String roleId : roleIds) {
+            roleKeys.add(roleService.getById(roleId).getKey());
+        }
+        admin.setRoles(roleKeys);
+        return admin;
     }
 
     /**
