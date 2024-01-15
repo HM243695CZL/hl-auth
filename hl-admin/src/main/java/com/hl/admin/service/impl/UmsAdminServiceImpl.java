@@ -1,5 +1,7 @@
 package com.hl.admin.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +17,7 @@ import com.hl.model.dto.AllocationRoleDto;
 import com.hl.model.dto.LoginParamDto;
 import com.hl.model.ums.UmsAdmin;
 import com.hl.model.ums.UmsAdminRole;
+import com.hl.model.ums.UmsRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +58,14 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     public Page<UmsAdmin> pageList(AdminPageDto pageDTO) {
         QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
         Page<UmsAdmin> page = new Page<>(pageDTO.getPageIndex(), pageDTO.getPageSize());
-        return page(page, queryWrapper);
+        if (StrUtil.isNotEmpty(pageDTO.getUsername())) {
+            queryWrapper.lambda().like(UmsAdmin::getUsername, pageDTO.getUsername());
+        }
+        // 根据分页查询用户
+        Page<UmsAdmin> pageList = page(page, queryWrapper);
+        // 根据用户id获取角色id
+        page.getRecords().stream().forEach(this::setUserRoles);
+        return pageList;
     }
 
     /**
@@ -176,5 +186,19 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
             adminRoleList.add(adminRole);
         }
         return adminRoleList;
+    }
+
+    /**
+     * 设置用户的roles字段
+     * @param userInfo
+     */
+    private void setUserRoles(UmsAdmin userInfo) {
+        List<String> roleIds = adminRoleService.list(new QueryWrapper<UmsAdminRole>().eq("admin_id", userInfo.getId())
+                .select("role_id")).stream().map(UmsAdminRole::getRoleId).collect(Collectors.toList());
+        if(!ObjectUtil.isEmpty(roleIds)) {
+            // 根据角色表查询对应的角色名称
+            List<String> roleName = roleService.listByIds(roleIds).stream().map(UmsRole::getKey).collect(Collectors.toList());
+            userInfo.setRoles(roleName);
+        }
     }
 }

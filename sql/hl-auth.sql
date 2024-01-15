@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 26/12/2023 17:03:12
+ Date: 15/01/2024 15:44:05
 */
 
 SET NAMES utf8mb4;
@@ -39,8 +39,7 @@ CREATE TABLE `ums_admin`  (
 -- ----------------------------
 -- Records of ums_admin
 -- ----------------------------
-INSERT INTO `ums_admin` VALUES ('4228967d4cbc82da70eb69020d8fa626', 'test1', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, '0:0:0:0:0:0:0:1', '2023-06-12 11:38:48', '', '2023-06-09 14:03:01', '2023-06-09 14:07:08', 0);
-INSERT INTO `ums_admin` VALUES ('8c2bf63982c58f7e43f14c6ddcb08581', 'admin', 'e10adc3949ba59abbe56e057f20f883e', 0, NULL, '0:0:0:0:0:0:0:1', '2023-06-12 14:10:02', '', '2023-06-02 13:08:03', '2023-06-02 13:08:03', 0);
+INSERT INTO `ums_admin` VALUES ('8c2bf63982c58f7e43f14c6ddcb08581', 'admin', 'e10adc3949ba59abbe56e057f20f883e', 0, NULL, '0:0:0:0:0:0:0:1', '2023-06-12 14:10:02', 'https://hl-mall-tiny.oss-cn-chengdu.aliyuncs.com/hlmall/images/20240115/2.png', '2023-06-02 13:08:03', '2024-01-15 14:55:21', 0);
 
 -- ----------------------------
 -- Table structure for ums_admin_role
@@ -56,8 +55,8 @@ CREATE TABLE `ums_admin_role`  (
 -- ----------------------------
 -- Records of ums_admin_role
 -- ----------------------------
-INSERT INTO `ums_admin_role` VALUES ('a5c4a7b007c251fde2b4187a992689cc', '4228967d4cbc82da70eb69020d8fa626', '90dd4022ad735b191f6f22a3b38b6303');
-INSERT INTO `ums_admin_role` VALUES ('cc68f1f22b7b1f0b5b2b89b830b5561b', '8c2bf63982c58f7e43f14c6ddcb08581', '57db19fa5d18da3bc2c2e20852aa08ac');
+INSERT INTO `ums_admin_role` VALUES ('16ff8f327f76549de4180571d82978a8', '8c2bf63982c58f7e43f14c6ddcb08581', '90dd4022ad735b191f6f22a3b38b6303');
+INSERT INTO `ums_admin_role` VALUES ('fd09268ff33ff12f68e9d130e0022224', '8c2bf63982c58f7e43f14c6ddcb08581', '57db19fa5d18da3bc2c2e20852aa08ac');
 
 -- ----------------------------
 -- Table structure for ums_menu
@@ -83,10 +82,10 @@ CREATE TABLE `ums_menu`  (
 -- ----------------------------
 -- Records of ums_menu
 -- ----------------------------
-INSERT INTO `ums_menu` VALUES ('2bd76aa9d67c8757d63df4a23f2e8c20', '3a1a9273d679e2bc098c40cbc4f7a04e', '/system/meun', 'systemMenu', '/system/menu', '菜单管理', NULL, 0, 1, 0, NULL, 'fa fa-bars', 3);
-INSERT INTO `ums_menu` VALUES ('3a1a9273d679e2bc098c40cbc4f7a04e', '', '/system', 'system', 'layout', '系统管理', NULL, 0, 1, 0, NULL, 'fa fa-cog', 0);
-INSERT INTO `ums_menu` VALUES ('4ffdf5a9ff76a55ebb139453532d5a15', '3a1a9273d679e2bc098c40cbc4f7a04e', '/system/role', 'systemRole', '/system/role', '角色管理', '', 0, 1, 0, 0, 'ele-Briefcase', 2);
-INSERT INTO `ums_menu` VALUES ('690c754029a1a86551d9a34b372bf498', '3a1a9273d679e2bc098c40cbc4f7a04e', '/system/user', 'systemUser', '/system/user', '用户管理', '', 0, 1, 0, 0, 'ele-Avatar', 1);
+INSERT INTO `ums_menu` VALUES ('2bd76aa9d67c8757d63df4a23f2e8c20', '3a1a9273d679e2bc098c40cbc4f7a04e', '/system/menu', 'systemMenu', '/system/menu', '菜单管理', NULL, 0, 1, 0, NULL, 'ph:align-bottom', 3);
+INSERT INTO `ums_menu` VALUES ('3a1a9273d679e2bc098c40cbc4f7a04e', '', '/system', 'system', 'layout', '系统管理', NULL, 0, 1, 0, NULL, 'ic:baseline-brightness-5', 0);
+INSERT INTO `ums_menu` VALUES ('4ffdf5a9ff76a55ebb139453532d5a15', '3a1a9273d679e2bc098c40cbc4f7a04e', '/system/role', 'systemRole', '/system/role', '角色管理', '', 0, 1, 0, 0, 'mdi:airballoon', 2);
+INSERT INTO `ums_menu` VALUES ('690c754029a1a86551d9a34b372bf498', '3a1a9273d679e2bc098c40cbc4f7a04e', '/system/user', 'systemUser', '/system/user', '用户管理', '', 0, 1, 0, 0, 'uil:capture', 1);
 
 -- ----------------------------
 -- Table structure for ums_role
